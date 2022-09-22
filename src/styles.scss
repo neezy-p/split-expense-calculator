@@ -1,7 +1,7 @@
 @import './variables';
 
 $theme-colors: (
-  'primary': #17b890,
+  'primary': $color-primary,
 );
 
 .btn-primary {

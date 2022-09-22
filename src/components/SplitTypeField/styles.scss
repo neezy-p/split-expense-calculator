@@ -1,5 +1,4 @@
-$chip-color: #e0e0e0;
-$chip-selected-color: #17b890;
+@import '../../variables.scss';
 
 .split-type {
   display: flex;
@@ -12,7 +11,7 @@ $chip-selected-color: #17b890;
   }
 
   &__option {
-    background-color: $chip-color;
+    background-color: $color-secondary;
     padding: 0.5rem 1rem;
     border-radius: 48px;
     color: inherit;
@@ -25,15 +24,15 @@ $chip-selected-color: #17b890;
     }
 
     &:hover {
-      background-color: darken($chip-color, 10%);
+      background-color: darken($color-secondary, 10%);
     }
 
     &--selected {
-      background-color: $chip-selected-color;
+      background-color: $color-primary;
       color: white;
 
       &:hover {
-        background-color: lighten($chip-selected-color, 5%);
+        background-color: lighten($color-primary, 5%);
       }
     }
   }

@@ -1,4 +1,4 @@
-$chip-color: #e0e0e0;
+@import '../../variables.scss';
 
 .splits {
   display: flex;
@@ -76,20 +76,20 @@ $chip-color: #e0e0e0;
     border-radius: 48px;
     font-size: 0.75rem;
     text-align: end;
-    background-color: $chip-color;
-    border: 1px solid darken($chip-color, 15%);
+    background-color: $color-secondary;
+    border: 1px solid darken($color-secondary, 15%);
     color: rgba(33, 37, 41, 0.75);
 
     &--warning {
-      background-color: #fff3cd;
-      border: 1px solid darken(#fff3cd, 15%);
-      color: darken(#fff3cd, 70%);
+      background-color: $color-warning;
+      border: 1px solid darken($color-warning, 15%);
+      color: darken($color-warning, 70%);
     }
 
     &--danger {
-      color: darken(#f8d7da, 50%);
-      background-color: #f8d7da;
-      border: 1px solid darken(#f8d7da, 15%);
+      color: darken($color-danger, 50%);
+      background-color: $color-danger;
+      border: 1px solid darken($color-danger, 15%);
     }
   }
 }
