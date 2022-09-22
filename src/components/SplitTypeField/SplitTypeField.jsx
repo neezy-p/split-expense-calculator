@@ -1,6 +1,7 @@
+import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
 import './styles.scss';
 
-const splitTypes = ['Equally', 'Exact amounts', 'Percentages', 'Shares'];
+const splitTypes = [EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES];
 
 export const SplitTypeField = (props) => {
   const getSelectedModifier = (type) => {

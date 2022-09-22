@@ -3,6 +3,7 @@ import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faPlusMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
 
 import './styles.scss';
 
@@ -20,25 +21,25 @@ export const SplitField = forwardRef((props, ref) => {
 
       <FormControl placeholder="Name" className="split-field__name" />
 
-      {['Exact amounts', 'Percentages', 'Shares'].includes(props.splitType) && (
+      {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(props.splitType) && (
         <InputGroup className="split-field__input">
-          {['Equally', 'Exact amounts'].includes(props.splitType) && (
+          {props.splitType === EXACT_AMOUNTS && (
             <InputGroup.Text>$</InputGroup.Text>
           )}
 
           <FormControl />
 
-          {props.splitType === 'Percentages' && (
+          {props.splitType === PERCENTAGES && (
             <InputGroup.Text>%</InputGroup.Text>
           )}
 
-          {props.splitType === 'Shares' && (
+          {props.splitType === SHARES && (
             <InputGroup.Text>share(s)</InputGroup.Text>
           )}
         </InputGroup>
       )}
 
-      {props.splitType === 'Shares' && (
+      {props.splitType === SHARES && (
         <InputGroup className="split-field__adjustment">
           <InputGroup.Text className="split-field__adjustment-text">
             <FontAwesomeIcon icon={faPlusMinus} size="2xs" />$

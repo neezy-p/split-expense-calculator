@@ -2,6 +2,7 @@ import { createRef, useState } from 'react';
 import { ActionBar } from './components/ActionBar/ActionBar';
 import { Header } from './components/Header';
 import { Splits } from './components/Splits/Splits';
+import { EQUALLY } from './constants';
 import generateUuid from './utils/generateUuid';
 
 import './styles.scss';
@@ -15,7 +16,7 @@ const createNewSplit = () => ({
 const initialSplits = [createNewSplit()];
 
 function App() {
-  const [selectedSplitType, setSelectedSplitType] = useState('Equally');
+  const [selectedSplitType, setSelectedSplitType] = useState(EQUALLY);
   const [splits, setSplits] = useState(initialSplits);
 
   const handleSplitTypeSelect = (type) => {
