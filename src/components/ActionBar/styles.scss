@@ -1,0 +1,24 @@
+.action-bar {
+  display: flex;
+  flex-direction: row !important;
+  column-gap: 2rem;
+  padding: 1rem;
+
+  &__divider {
+    border-right: 1px solid lightgray;
+  }
+
+  &__split-type-field {
+    flex: 1 0 auto;
+  }
+}
+
+.total-expense {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+
+  &__input {
+    max-width: 200px;
+  }
+}

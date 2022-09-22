@@ -1,0 +1,40 @@
+.split-field {
+  display: grid;
+  align-items: center;
+  column-gap: 1rem;
+  width: 100%;
+  grid-template-columns: min-content auto 200px min-content 40px;
+
+  &--with-adjustment {
+    grid-template-columns: min-content auto 150px 160px min-content 40px;
+  }
+
+  &__index {
+    width: 40px;
+  }
+
+  &__input {
+    max-width: 200px;
+  }
+
+  &__adjustment-text {
+    display: flex;
+    column-gap: 0.25rem;
+  }
+
+  &__amount {
+    grid-column-end: -2;
+    width: 100px;
+    text-align: end;
+    padding: 0.375rem 0.75rem;
+  }
+
+  &__remove {
+    grid-column-end: -1;
+    color: red !important;
+
+    &:hover {
+      background-color: lighten(red, 40%) !important;
+    }
+  }
+}

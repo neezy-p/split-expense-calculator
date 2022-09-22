@@ -1,0 +1,27 @@
+@import './variables';
+
+$theme-colors: (
+  'primary': #17b890,
+);
+
+.btn-primary {
+  color: white !important;
+}
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+.app {
+  height: 100vh;
+  background-color: #faf9f6;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  height: calc(100vh - #{$header-height});
+  padding: 2rem;
+  max-width: 1440px;
+  margin: auto;
+  overflow: auto;
+}

@@ -1,0 +1,40 @@
+$chip-color: #e0e0e0;
+$chip-selected-color: #17b890;
+
+.split-type {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+
+  &__options {
+    display: flex;
+    column-gap: 1rem;
+  }
+
+  &__option {
+    background-color: $chip-color;
+    padding: 0.5rem 1rem;
+    border-radius: 48px;
+    color: inherit;
+    font: inherit;
+    outline: inherit;
+    border: none;
+
+    &:focus {
+      outline: 1px solid black;
+    }
+
+    &:hover {
+      background-color: darken($chip-color, 10%);
+    }
+
+    &--selected {
+      background-color: $chip-selected-color;
+      color: white;
+
+      &:hover {
+        background-color: lighten($chip-selected-color, 5%);
+      }
+    }
+  }
+}
