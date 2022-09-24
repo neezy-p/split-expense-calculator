@@ -46,6 +46,8 @@ export const Splits = (props) => {
               position={index + 1}
               splitType={props.selectedSplitType}
               onRemove={handleRemoveFor(split.id)}
+              totalExpense={props.totalExpense}
+              splits={props.splits}
             />
           </CSSTransition>
         ))}

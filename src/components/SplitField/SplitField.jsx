@@ -1,15 +1,15 @@
-import { forwardRef } from 'react';
-import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faPlusMinus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
+import { forwardRef } from "react";
+import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPlusMinus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
 
-import './styles.scss';
+import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
   const withAdjustmentModifier =
-    props.splitType === 'Shares' ? 'split-field--with-adjustment' : '';
+    props.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
   const handleRemoveClick = () => {
     props.onRemove();
@@ -49,13 +49,19 @@ export const SplitField = forwardRef((props, ref) => {
         </InputGroup>
       )}
 
-      <Card className="split-field__amount">$0</Card>
+      <Card className="split-field__amount">
+        $
+        {props.splitType === EQUALLY &&
+          (props.totalExpense / props.splits.length).toLocaleString("en-US", {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 0
+          })}
+      </Card>
 
       <Button
         variant="link"
         className="split-field__remove"
-        onClick={handleRemoveClick}
-      >
+        onClick={handleRemoveClick}>
         <FontAwesomeIcon icon={faTrashCan} />
       </Button>
     </div>

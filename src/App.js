@@ -18,6 +18,7 @@ const initialSplits = [createNewSplit()];
 function App() {
   const [selectedSplitType, setSelectedSplitType] = useState(EQUALLY);
   const [splits, setSplits] = useState(initialSplits);
+  const [totalExpense, setTotalExpense] = useState("");
 
   const handleSplitTypeSelect = (type) => {
     setSelectedSplitType(type);
@@ -41,12 +42,15 @@ function App() {
           selectedSplitType={selectedSplitType}
           onSplitTypeSelect={handleSplitTypeSelect}
           onAddSplit={handleAddSplit}
+          totalExpense={totalExpense}
+          setTotalExpense={setTotalExpense}
         />
         <Splits
           selectedSplitType={selectedSplitType}
           splits={splits}
           onAddSplit={handleAddSplit}
           onRemoveSplit={handleRemoveSplit}
+          totalExpense={totalExpense}
         />
       </div>
     </div>

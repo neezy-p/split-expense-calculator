@@ -1,12 +1,12 @@
-import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { SplitTypeField } from '../SplitTypeField';
+import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
+import { SplitTypeField } from "../SplitTypeField";
 
-import './styles.scss';
+import "./styles.scss";
 
 export const ActionBar = (props) => {
   const handleAddClick = () => {
     props.onAddSplit();
-  }
+  };
 
   return (
     <Card className="action-bar">
@@ -14,7 +14,11 @@ export const ActionBar = (props) => {
         <label className="total-expense__label">Total expense</label>
         <InputGroup className="total-expense__input">
           <InputGroup.Text>$</InputGroup.Text>
-          <FormControl />
+          <FormControl
+            type="number"
+            value={props.totalExpense}
+            onChange={(e) => props.setTotalExpense(e.target.value)}
+          />
         </InputGroup>
       </div>
 
