@@ -1,13 +1,16 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faPlusMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
+import formatCurrency from "../../utils/formatCurrency";
 
 import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
+  const [input, setInput] = useState("");
+
   const withAdjustmentModifier =
     props.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
@@ -27,7 +30,11 @@ export const SplitField = forwardRef((props, ref) => {
             <InputGroup.Text>$</InputGroup.Text>
           )}
 
-          <FormControl />
+          <FormControl
+            type="number"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
 
           {props.splitType === PERCENTAGES && (
             <InputGroup.Text>%</InputGroup.Text>
@@ -52,10 +59,8 @@ export const SplitField = forwardRef((props, ref) => {
       <Card className="split-field__amount">
         $
         {props.splitType === EQUALLY &&
-          (props.totalExpense / props.splits.length).toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 0
-          })}
+          formatCurrency(props.totalExpense / props.splits.length)}
+        {props.splitType === EXACT_AMOUNTS && input}
       </Card>
 
       <Button
