@@ -9,13 +9,17 @@ import formatCurrency from "../../utils/formatCurrency";
 import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
-  const [input, setInput] = useState("");
+  const [value, setValue] = useState("");
 
   const withAdjustmentModifier =
     props.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
   const handleRemoveClick = () => {
     props.onRemove();
+  };
+
+  const handleSplitValueChange = (e) => {
+    setValue(e.target.value);
   };
 
   return (
@@ -32,8 +36,8 @@ export const SplitField = forwardRef((props, ref) => {
 
           <FormControl
             type="number"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={value}
+            onChange={handleSplitValueChange}
           />
 
           {props.splitType === PERCENTAGES && (
@@ -57,10 +61,7 @@ export const SplitField = forwardRef((props, ref) => {
       )}
 
       <Card className="split-field__amount">
-        $
-        {props.splitType === EQUALLY &&
-          formatCurrency(props.totalExpense / props.splits.length)}
-        {props.splitType === EXACT_AMOUNTS && input}
+        ${formatCurrency(props.value)}
       </Card>
 
       <Button

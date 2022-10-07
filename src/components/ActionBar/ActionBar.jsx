@@ -8,6 +8,10 @@ export const ActionBar = (props) => {
     props.onAddSplit();
   };
 
+  const handleTotalExpenseChange = (e) => {
+    props.onTotalExpenseChange(e.target.value);
+  };
+
   return (
     <Card className="action-bar">
       <div className="total-expense">
@@ -17,7 +21,7 @@ export const ActionBar = (props) => {
           <FormControl
             type="number"
             value={props.totalExpense}
-            onChange={(e) => props.setTotalExpense(e.target.value)}
+            onChange={handleTotalExpenseChange}
           />
         </InputGroup>
       </div>
