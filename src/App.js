@@ -1,53 +1,20 @@
-import { createRef, useState } from 'react';
-import { ActionBar } from './components/ActionBar/ActionBar';
-import { Header } from './components/Header';
-import { Splits } from './components/Splits/Splits';
-import { EQUALLY } from './constants';
-import generateUuid from './utils/generateUuid';
+import { useContext } from "react";
+import { ActionBar } from "./components/ActionBar/ActionBar";
+import { Header } from "./components/Header";
+import { Splits } from "./components/Splits/Splits";
 
-import './styles.scss';
-
-const createNewSplit = () => ({
-  id: generateUuid(),
-  name: '',
-  nodeRef: createRef(null),
-});
-
-const initialSplits = [createNewSplit()];
+import "./styles.scss";
+import SplitDataContext from "./store/split-data-context";
 
 function App() {
-  const [selectedSplitType, setSelectedSplitType] = useState(EQUALLY);
-  const [splits, setSplits] = useState(initialSplits);
-
-  const handleSplitTypeSelect = (type) => {
-    setSelectedSplitType(type);
-  };
-
-  const handleAddSplit = () => {
-    const newSplit = createNewSplit();
-    setSplits([...splits, newSplit]);
-  };
-
-  const handleRemoveSplit = (id) => {
-    const newSplits = splits.filter((item) => item.id !== id);
-    setSplits(newSplits);
-  };
+  const splitState = useContext(SplitDataContext);
 
   return (
     <div className="app">
       <Header />
       <div className="body">
-        <ActionBar
-          selectedSplitType={selectedSplitType}
-          onSplitTypeSelect={handleSplitTypeSelect}
-          onAddSplit={handleAddSplit}
-        />
-        <Splits
-          selectedSplitType={selectedSplitType}
-          splits={splits}
-          onAddSplit={handleAddSplit}
-          onRemoveSplit={handleRemoveSplit}
-        />
+        <ActionBar onTotalEntered={splitState.handleTotalEntered} />
+        <Splits onTotalEntered={splitState.handleTotalEntered} />
       </div>
     </div>
   );

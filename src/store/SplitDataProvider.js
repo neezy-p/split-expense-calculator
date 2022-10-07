@@ -7,6 +7,7 @@ const createNewSplit = () => ({
   id: generateUuid(),
   name: "",
   nodeRef: createRef(null),
+  value: 0,
 });
 
 const initialSplits = [createNewSplit()];
