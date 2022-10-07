@@ -43,9 +43,12 @@ export const Splits = (props) => {
           >
             <SplitField
               ref={split.nodeRef}
+              value={split.value}
               position={index + 1}
               splitType={props.selectedSplitType}
               onRemove={handleRemoveFor(split.id)}
+              totalExpense={props.totalExpense}
+              splits={props.splits}
             />
           </CSSTransition>
         ))}

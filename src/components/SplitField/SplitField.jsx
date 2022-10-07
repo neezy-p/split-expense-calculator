@@ -1,18 +1,25 @@
-import { forwardRef } from 'react';
-import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faPlusMinus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
+import { forwardRef, useState } from "react";
+import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPlusMinus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
+import formatCurrency from "../../utils/formatCurrency";
 
-import './styles.scss';
+import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
+  const [value, setValue] = useState("");
+
   const withAdjustmentModifier =
-    props.splitType === 'Shares' ? 'split-field--with-adjustment' : '';
+    props.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
   const handleRemoveClick = () => {
     props.onRemove();
+  };
+
+  const handleSplitValueChange = (e) => {
+    setValue(e.target.value);
   };
 
   return (
@@ -27,7 +34,11 @@ export const SplitField = forwardRef((props, ref) => {
             <InputGroup.Text>$</InputGroup.Text>
           )}
 
-          <FormControl />
+          <FormControl
+            type="number"
+            value={value}
+            onChange={handleSplitValueChange}
+          />
 
           {props.splitType === PERCENTAGES && (
             <InputGroup.Text>%</InputGroup.Text>
@@ -49,13 +60,14 @@ export const SplitField = forwardRef((props, ref) => {
         </InputGroup>
       )}
 
-      <Card className="split-field__amount">$0</Card>
+      <Card className="split-field__amount">
+        ${formatCurrency(props.value)}
+      </Card>
 
       <Button
         variant="link"
         className="split-field__remove"
-        onClick={handleRemoveClick}
-      >
+        onClick={handleRemoveClick}>
         <FontAwesomeIcon icon={faTrashCan} />
       </Button>
     </div>
