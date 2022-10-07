@@ -16,7 +16,7 @@ export const ActionBar = (props) => {
 
   const handleChange = (e) => {
     setEnteredInput(e.target.value);
-    props.onTotalEntered(e.target.value);
+    splitState.handleTotalEntered(e.target.value);
   };
 
   return (

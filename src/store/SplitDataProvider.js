@@ -7,7 +7,7 @@ const createNewSplit = () => ({
   id: generateUuid(),
   name: "",
   nodeRef: createRef(null),
-  value: 0,
+  value: "",
 });
 
 const initialSplits = [createNewSplit()];
@@ -19,6 +19,14 @@ const defaultSplitDataState = {
   totalAmountRemaining: "",
   splitsPerPerson: "",
   splitsTotalAmount: "0",
+};
+
+const getSplitsTotal = (splits) => {
+  const total = splits
+    .map((split) => Number(split.value))
+    .reduce((acc, cur) => (cur += acc), 0);
+
+  return total;
 };
 
 const splitReducer = (state, action) => {
@@ -33,14 +41,13 @@ const splitReducer = (state, action) => {
       dummyObj = {
         ...state,
         splitType: updatedSplitType,
-        totalAmountRemaining: console.log("you got here"),
       };
     }
     if (action.splitType === EXACT_AMOUNTS) {
       dummyObj = {
         ...state,
         splitType: updatedSplitType,
-        totalAmountRemaining: console.log("you got here222222222"),
+        // totalAmountRemaining: console.log("you got here222222222"),
       };
     }
     if (action.splitType === PERCENTAGES) {
@@ -61,6 +68,7 @@ const splitReducer = (state, action) => {
   if (action.type === "AMOUNT_ENTERED") {
     const updatedAmount = action.amount;
     console.log(updatedAmount);
+
     return {
       ...state,
       totalAmount: updatedAmount,
@@ -69,6 +77,24 @@ const splitReducer = (state, action) => {
           ? "$0"
           : (updatedAmount / state.splits.length).toFixed(2),
       splitsTotalAmount: state.splitType === EQUALLY ? action.amount : 0,
+    };
+  }
+
+  if (action.type === "EXACT_INPUT") {
+    let dummyObj;
+    const inputAmt = action.amount;
+    const newSplitsWithValues = state.splits.map((split, i) => {
+      return {
+        ...split,
+        value: action.splitId === split.id ? inputAmt : split.value,
+      };
+    });
+    console.log(newSplitsWithValues);
+
+    return {
+      ...state,
+      splits: newSplitsWithValues,
+      splitsTotalAmount: getSplitsTotal(newSplitsWithValues),
     };
   }
 
@@ -159,6 +185,11 @@ const SplitDataProvider = (props) => {
     dispatchSplitAction({ type: "REMOVE", id, splitType });
   };
 
+  const handleSplitFieldInputChange = (amount, splitId) => {
+    dispatchSplitAction({ type: "EXACT_INPUT", amount, splitId });
+    console.log(amount, splitId);
+  };
+
   const splitDataContext = {
     splitType: splitState.splitType,
     splits: splitState.splits,
@@ -170,6 +201,7 @@ const SplitDataProvider = (props) => {
     handleSplitTypeSelect,
     handleAddSplit,
     handleRemoveSplit,
+    handleSplitFieldInputChange,
   };
   return (
     <SplitDataContext.Provider value={splitDataContext}>

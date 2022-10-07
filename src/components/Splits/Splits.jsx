@@ -57,6 +57,8 @@ export const Splits = (props) => {
               splitType={splitState.splitType}
               onRemove={handleRemoveFor(split.id)}
               onSplitFieldChange={handleSplitFieldChange}
+              value={split.value}
+              id={split.id}
             />
           </CSSTransition>
         ))}

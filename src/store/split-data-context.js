@@ -11,6 +11,7 @@ const SplitDataContext = React.createContext({
   handleSplitTypeSelect: (type) => {},
   handleAddSplit: () => {},
   handleRemoveSplit: () => {},
+  handleSplitFieldInputChange: () => {},
 });
 
 export default SplitDataContext;

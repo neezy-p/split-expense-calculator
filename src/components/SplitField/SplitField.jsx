@@ -10,7 +10,8 @@ import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
   const splitState = useContext(SplitDataContext);
-  const [exactAmtInput, setExactAmtInput] = useState([""]);
+
+  const [exactAmtInput, setExactAmtInput] = useState("");
 
   const withAdjustmentModifier =
     props.splitType === "Shares" ? "split-field--with-adjustment" : "";
@@ -19,8 +20,10 @@ export const SplitField = forwardRef((props, ref) => {
     props.onRemove();
   };
 
-  const handleSplitFieldChange = (e) => {
-    props.onSplitFieldChange(e.target.value);
+  const handleChange = (e) => {
+    const inputId = props.id;
+    console.log(inputId);
+    splitState.handleSplitFieldInputChange(e.target.value, inputId);
   };
 
   return (
@@ -36,8 +39,9 @@ export const SplitField = forwardRef((props, ref) => {
           )}
 
           <FormControl
-            onChange={handleSplitFieldChange}
-            value={exactAmtInput}
+            onChange={handleChange}
+            value={props.value}
+            key={props.key}
           />
 
           {splitState.splitType === PERCENTAGES && (
@@ -64,7 +68,7 @@ export const SplitField = forwardRef((props, ref) => {
         $
         {splitState.splitType === EQUALLY &&
           (splitState.totalAmount === null ? "0" : splitState.splitsPerPerson)}
-        {splitState.splitType === EXACT_AMOUNTS && exactAmtInput}
+        {splitState.splitType === EXACT_AMOUNTS && props.value}
       </Card>
 
       <Button
