@@ -34,14 +34,44 @@ const splitReducer = (state, action) => {
 
   if (action.type === "SELECT_TYPE") {
     let dummyObj;
+    let newSplits;
     const updatedSplitType = action.splitType;
     console.log(action.splitType);
 
     if (action.splitType === EQUALLY) {
+      ///////////////////////////
+      if (state.totalAmount === null)
+        return { ...state, splitType: updatedSplitType };
+
+      if (state.totalAmount != null) {
+        const totalAmountInCents = state.totalAmount * 100;
+        const splitsWithExtraPenny = totalAmountInCents % state.splits.length;
+        const equalSplitAmount = +(
+          state.totalAmount / state.splits.length
+        ).toFixed(2);
+
+        newSplits = state.splits.map((split, i) => {
+          if (i + 1 <= splitsWithExtraPenny)
+            return {
+              ...split,
+              value: +(equalSplitAmount + 0.01000001).toFixed(2),
+            };
+
+          return { ...split, value: equalSplitAmount };
+        });
+
+        console.log("cents", totalAmountInCents);
+        console.log("modulo", splitsWithExtraPenny);
+        console.log(newSplits);
+      }
+
       dummyObj = {
         ...state,
         splitType: updatedSplitType,
+        splits: newSplits,
       };
+      console.log("DUMMMYYYY", dummyObj);
+      /////////////////////////////
     }
     if (action.splitType === EXACT_AMOUNTS) {
       dummyObj = {
@@ -100,25 +130,44 @@ const splitReducer = (state, action) => {
 
   if (action.type === "ADD") {
     let dummyObj; // is undefined === console.log(dummyObj);
+    let newSplits;
 
     const updatedSplits = state.splits.concat(newSplit);
-    const updatedAmtOfPeople = updatedSplits.length;
+    console.log("updatedSplits", updatedSplits);
 
     if (action.splitType === EQUALLY) {
-      const updatedSplitsPerPerson = (
-        state.totalAmount / updatedAmtOfPeople
-      ).toFixed(2);
+      if (state.totalAmount === null)
+        return { ...state, splits: updatedSplits };
+
+      if (state.totalAmount != null) {
+        const totalAmountInCents = state.totalAmount * 100;
+        const splitsWithExtraPenny = totalAmountInCents % updatedSplits.length;
+        const equalSplitAmount = +(
+          state.totalAmount / updatedSplits.length
+        ).toFixed(2);
+
+        newSplits = updatedSplits.map((split, i) => {
+          if (i + 1 <= splitsWithExtraPenny)
+            return {
+              ...split,
+              value: +(equalSplitAmount + 0.01000001).toFixed(2),
+            };
+
+          return { ...split, value: equalSplitAmount };
+        });
+        // console.log("updatedSplits", updatedSplits);
+
+        console.log("modulo", splitsWithExtraPenny);
+        console.log(newSplits);
+      }
 
       dummyObj = {
         ...state,
-        splits: updatedSplits,
-        amtOfPeople: updatedAmtOfPeople,
-        splitsPerPerson: updatedSplitsPerPerson,
+        splits: newSplits,
       };
+      console.log(dummyObj);
 
-      return dummyObj === undefined
-        ? { ...state, splits: updatedSplits }
-        : dummyObj;
+      return dummyObj;
     }
   }
 

@@ -67,7 +67,7 @@ export const SplitField = forwardRef((props, ref) => {
       <Card className="split-field__amount">
         $
         {splitState.splitType === EQUALLY &&
-          (splitState.totalAmount === null ? "0" : splitState.splitsPerPerson)}
+          (splitState.totalAmount === null ? "0" : props.value)}
         {splitState.splitType === EXACT_AMOUNTS && props.value}
       </Card>
 
