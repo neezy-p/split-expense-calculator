@@ -13,8 +13,8 @@ function App() {
     <div className="app">
       <Header />
       <div className="body">
-        <ActionBar onTotalEntered={splitState.handleTotalEntered} />
-        <Splits onTotalEntered={splitState.handleTotalEntered} />
+        <ActionBar />
+        <Splits />
       </div>
     </div>
   );

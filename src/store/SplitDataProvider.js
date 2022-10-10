@@ -97,17 +97,67 @@ const splitReducer = (state, action) => {
 
   if (action.type === "AMOUNT_ENTERED") {
     const updatedAmount = action.amount;
-    console.log(updatedAmount);
+    let dummyObj;
+    let newSplits;
 
-    return {
-      ...state,
-      totalAmount: updatedAmount,
-      splitsPerPerson:
-        state.splits.length < 1
-          ? "$0"
-          : (updatedAmount / state.splits.length).toFixed(2),
-      splitsTotalAmount: state.splitType === EQUALLY ? action.amount : 0,
-    };
+    if (action.splitType === EQUALLY) {
+      if (state.splits < 1) {
+        dummyObj = {
+          ...state,
+          totalAmount: updatedAmount,
+        };
+
+        console.log("length<<<<<<<", dummyObj);
+        return dummyObj;
+      }
+      if (state.splits.length === 1) {
+        const newSplit = [...initialSplits];
+        newSplit[0].value = updatedAmount;
+        console.log("value here", newSplit[0].value, newSplit);
+        console.log(state);
+        dummyObj = {
+          ...state,
+          splitsTotalAmount: updatedAmount,
+          splits: newSplit,
+        };
+        console.log("length=11111111", dummyObj);
+
+        // return dummyObj;
+      } else {
+        const totalAmountInCents = state.totalAmount * 100;
+        const splitsWithExtraPenny = totalAmountInCents % state.splits.length;
+        const equalSplitAmount = +(
+          state.totalAmount / state.splits.length
+        ).toFixed(2);
+
+        newSplits = state.Splits.map((split, i) => {
+          if (i + 1 <= splitsWithExtraPenny)
+            return {
+              ...split,
+              value: +(equalSplitAmount + 0.01000001).toFixed(2),
+            };
+
+          return { ...split, value: equalSplitAmount };
+        });
+
+        dummyObj = {
+          ...state,
+          splits: newSplits,
+        };
+      }
+      return dummyObj;
+    }
+    console.log("you still made it");
+
+    // return {
+    //   ...state,
+    //   totalAmount: updatedAmount,
+    //   splitsPerPerson:
+    //     state.splits.length < 1
+    //       ? "$0"
+    //       : (updatedAmount / state.splits.length).toFixed(2),
+    //   splitsTotalAmount: state.splitType === EQUALLY ? action.amount : 0,
+    // };
   }
 
   if (action.type === "EXACT_INPUT") {
@@ -215,10 +265,10 @@ const SplitDataProvider = (props) => {
     defaultSplitDataState
   );
 
-  const handleTotalEntered = (amount) => {
+  const handleTotalEntered = (amount, splitType) => {
     const total = Number(amount).toFixed(2);
 
-    dispatchSplitAction({ type: "AMOUNT_ENTERED", amount: total });
+    dispatchSplitAction({ type: "AMOUNT_ENTERED", amount: total, splitType });
   };
 
   const handleSplitTypeSelect = (splitType) => {
