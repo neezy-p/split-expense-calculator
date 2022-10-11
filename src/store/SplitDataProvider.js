@@ -32,6 +32,25 @@ const getSplitsTotal = (splits) => {
 const splitReducer = (state, action) => {
   const newSplit = createNewSplit();
 
+  /*non-working attempt at trying to abstract name/input changes*/
+  //
+  // const handleSplitInputChanges=(field,actionInput,actionId)=>{
+  //   // you get either the action or name as field
+  //   const newSplitsWithValues = state.splits.map((split,i)=>{
+  //     return{
+  //       ...split,
+  //       field: actionId === split.id? actionInput : split.field
+  //     }
+
+  //   })
+
+  //   return{
+  //     ...state,
+  //     splits:newSplitsWithValues
+  //   }
+
+  // }
+
   if (action.type === "SELECT_TYPE") {
     let dummyObj;
     let newSplits;
@@ -59,10 +78,6 @@ const splitReducer = (state, action) => {
 
           return { ...split, value: equalSplitAmount };
         });
-
-        console.log("cents", totalAmountInCents);
-        console.log("modulo", splitsWithExtraPenny);
-        console.log(newSplits);
       }
 
       dummyObj = {
@@ -70,14 +85,12 @@ const splitReducer = (state, action) => {
         splitType: updatedSplitType,
         splits: newSplits,
       };
-      console.log("DUMMMYYYY", dummyObj);
       /////////////////////////////
     }
     if (action.splitType === EXACT_AMOUNTS) {
       dummyObj = {
         ...state,
         splitType: updatedSplitType,
-        // totalAmountRemaining: console.log("you got here222222222"),
       };
     }
     if (action.splitType === PERCENTAGES) {
@@ -107,8 +120,6 @@ const splitReducer = (state, action) => {
           totalAmount: updatedAmount,
           splitsTotalAmount: updatedAmount,
         };
-
-        console.log("length<<<<<<<", dummyObj);
         return dummyObj;
       }
       if (state.splits.length === 1) {
@@ -121,7 +132,6 @@ const splitReducer = (state, action) => {
             : [...initialSplits];
         newSplit[0].value = updatedAmount;
         newSplit[0].name = state.splits[0].name;
-        newSplit[0].nodeRef = state.splits[0].nodeRef.current;
         console.log("new split:", newSplit[0].name);
 
         dummyObj = {
@@ -199,7 +209,6 @@ const splitReducer = (state, action) => {
       };
     });
 
-    console.log(newSplitsWithNames);
     return {
       ...state,
       splits: newSplitsWithNames,
@@ -211,7 +220,6 @@ const splitReducer = (state, action) => {
     let newSplits;
 
     const updatedSplits = state.splits.concat(newSplit);
-    console.log("updatedSplits", updatedSplits);
 
     if (action.splitType === EQUALLY) {
       if (state.totalAmount === null)
@@ -234,46 +242,56 @@ const splitReducer = (state, action) => {
           return { ...split, value: equalSplitAmount };
         });
         // console.log("updatedSplits", updatedSplits);
-
-        console.log("modulo", splitsWithExtraPenny);
-        console.log(newSplits);
+        // console.log("modulo", splitsWithExtraPenny);
+        // console.log(newSplits);
       }
-
       dummyObj = {
         ...state,
         splits: newSplits,
       };
-      console.log(dummyObj);
-
       return dummyObj;
     }
   }
 
   if (action.type === "REMOVE") {
     let dummyObj;
+    let newSplits;
     const updatedSplits = state.splits.filter(
       (split) => split.id !== action.id
     );
     const updatedAmtOfPeople = updatedSplits.length;
-    const updatedSplitsPerPerson = (
-      state.totalAmount / updatedSplits.length
-    ).toFixed(2);
-    console.log(action.splitType);
 
     if (action.splitType === EQUALLY) {
-      const updatedSplitsPerPerson = (
-        state.totalAmount / updatedAmtOfPeople
-      ).toFixed(2);
-      console.log("you made it to remove");
+      if (state.totalAmount === null)
+        return { ...state, splits: updatedSplits };
+
+      if (state.totalAmount != null) {
+        const totalAmountInCents = state.totalAmount * 100;
+        const splitsWithExtraPenny = totalAmountInCents % updatedSplits.length;
+        const equalSplitAmount = +(
+          state.totalAmount / updatedSplits.length
+        ).toFixed(2);
+
+        newSplits = updatedSplits.map((split, i) => {
+          if (i + 1 <= splitsWithExtraPenny)
+            return {
+              ...split,
+              value: +(equalSplitAmount + 0.01000001).toFixed(2),
+            };
+
+          return { ...split, value: equalSplitAmount };
+        });
+        // console.log("updatedSplits", updatedSplits);
+        // console.log("modulo", splitsWithExtraPenny);
+        // console.log(newSplits);
+      }
 
       dummyObj = {
         ...state,
-        splits: updatedSplits,
-        amtOfPeople: updatedAmtOfPeople,
-        splitsPerPerson: updatedSplitsPerPerson,
+        splits: newSplits,
       };
 
-      console.log(dummyObj);
+      return dummyObj;
     }
 
     return dummyObj === undefined
@@ -309,13 +327,11 @@ const SplitDataProvider = (props) => {
   };
 
   const handleRemoveSplit = (id, splitType) => {
-    console.log(splitType);
     dispatchSplitAction({ type: "REMOVE", id, splitType });
   };
 
   const handleSplitFieldInputChange = (amount, splitId) => {
     dispatchSplitAction({ type: "EXACT_INPUT", amount, splitId });
-    console.log(amount, splitId);
   };
 
   const handleNameChange = (name, splitId) => {
