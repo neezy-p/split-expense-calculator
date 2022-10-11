@@ -105,32 +105,42 @@ const splitReducer = (state, action) => {
         dummyObj = {
           ...state,
           totalAmount: updatedAmount,
+          splitsTotalAmount: updatedAmount,
         };
 
         console.log("length<<<<<<<", dummyObj);
         return dummyObj;
       }
       if (state.splits.length === 1) {
-        const newSplit = [...initialSplits];
+        console.log(state.splits);
+        // the app rerenders a new entire split and does not save the previous name
+        console.log("state name:", state.splits[0].name);
+        const newSplit =
+          state.splits[0].value !== action.amount
+            ? state.splits
+            : [...initialSplits];
         newSplit[0].value = updatedAmount;
-        console.log("value here", newSplit[0].value, newSplit);
-        console.log(state);
+        newSplit[0].name = state.splits[0].name;
+        newSplit[0].nodeRef = state.splits[0].nodeRef.current;
+        console.log("new split:", newSplit[0].name);
+
         dummyObj = {
           ...state,
           splitsTotalAmount: updatedAmount,
+          totalAmount: updatedAmount,
           splits: newSplit,
         };
-        console.log("length=11111111", dummyObj);
 
+        console.log("state***", state.splits, "newSplit::", newSplit);
         // return dummyObj;
       } else {
-        const totalAmountInCents = state.totalAmount * 100;
+        const totalAmountInCents = action.amount * 100;
         const splitsWithExtraPenny = totalAmountInCents % state.splits.length;
-        const equalSplitAmount = +(
-          state.totalAmount / state.splits.length
-        ).toFixed(2);
+        const equalSplitAmount = +(action.amount / state.splits.length).toFixed(
+          2
+        );
 
-        newSplits = state.Splits.map((split, i) => {
+        newSplits = state.splits.map((split, i) => {
           if (i + 1 <= splitsWithExtraPenny)
             return {
               ...split,
@@ -143,6 +153,8 @@ const splitReducer = (state, action) => {
         dummyObj = {
           ...state,
           splits: newSplits,
+          totalAmount: action.amount,
+          splitsTotalAmount: action.amount,
         };
       }
       return dummyObj;
@@ -175,6 +187,22 @@ const splitReducer = (state, action) => {
       ...state,
       splits: newSplitsWithValues,
       splitsTotalAmount: getSplitsTotal(newSplitsWithValues),
+    };
+  }
+  if (action.type === "NAME_CHANGE") {
+    let dummyObj;
+    const inputName = action.name;
+    const newSplitsWithNames = state.splits.map((split, i) => {
+      return {
+        ...split,
+        name: action.splitId === split.id ? inputName : split.name,
+      };
+    });
+
+    console.log(newSplitsWithNames);
+    return {
+      ...state,
+      splits: newSplitsWithNames,
     };
   }
 
@@ -223,7 +251,6 @@ const splitReducer = (state, action) => {
 
   if (action.type === "REMOVE") {
     let dummyObj;
-    console.log(dummyObj);
     const updatedSplits = state.splits.filter(
       (split) => split.id !== action.id
     );
@@ -245,6 +272,8 @@ const splitReducer = (state, action) => {
         amtOfPeople: updatedAmtOfPeople,
         splitsPerPerson: updatedSplitsPerPerson,
       };
+
+      console.log(dummyObj);
     }
 
     return dummyObj === undefined
@@ -289,6 +318,10 @@ const SplitDataProvider = (props) => {
     console.log(amount, splitId);
   };
 
+  const handleNameChange = (name, splitId) => {
+    dispatchSplitAction({ type: "NAME_CHANGE", name, splitId });
+  };
+
   const splitDataContext = {
     splitType: splitState.splitType,
     splits: splitState.splits,
@@ -301,6 +334,7 @@ const SplitDataProvider = (props) => {
     handleAddSplit,
     handleRemoveSplit,
     handleSplitFieldInputChange,
+    handleNameChange,
   };
   return (
     <SplitDataContext.Provider value={splitDataContext}>

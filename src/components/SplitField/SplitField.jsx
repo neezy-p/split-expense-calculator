@@ -26,11 +26,21 @@ export const SplitField = forwardRef((props, ref) => {
     splitState.handleSplitFieldInputChange(e.target.value, inputId);
   };
 
+  const handleNameChange = (e) => {
+    const inputId = props.id;
+    splitState.handleNameChange(e.target.value, inputId);
+  };
+
   return (
     <div className={`split-field ${withAdjustmentModifier}`} ref={ref}>
       <div className="split-field__index">{props.position}</div>
 
-      <FormControl placeholder="Name" className="split-field__name" />
+      <FormControl
+        placeholder="Name"
+        className="split-field__name"
+        onChange={handleNameChange}
+        value={props.name}
+      />
 
       {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(props.splitType) && (
         <InputGroup className="split-field__input">

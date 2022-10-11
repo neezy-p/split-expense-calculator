@@ -59,6 +59,7 @@ export const Splits = (props) => {
               onSplitFieldChange={handleSplitFieldChange}
               value={split.value}
               id={split.id}
+              name={split.name}
             />
           </CSSTransition>
         ))}
