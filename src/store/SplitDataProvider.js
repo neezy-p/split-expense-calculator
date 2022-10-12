@@ -2,6 +2,7 @@ import React, { createRef, useReducer } from "react";
 import SplitDataContext from "./split-data-context";
 import generateUuid from "../utils/generateUuid";
 import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../constants";
+import currency from "currency.js";
 
 const createNewSplit = () => ({
   id: generateUuid(),
@@ -26,21 +27,28 @@ const getSplitsTotal = (splits) => {
     .map((split) => Number(split.value))
     .reduce((acc, cur) => (cur += acc), 0);
 
-  return total;
+  return total.toFixed(2);
 };
 const newSplitsforEqually = (totalAmount, splits) => {
-  const totalAmountInCents = totalAmount * 100;
-  const splitsWithExtraPenny = totalAmountInCents % splits.length;
+  const totalAmountInCents = +(totalAmount * 100);
+  const splitsWithExtraPenny = +(totalAmountInCents % splits.length);
   const equalSplitAmount = +(totalAmount / splits.length).toFixed(2);
 
+  console.log("modulo", splitsWithExtraPenny);
   const newSplits = splits.map((split, i) => {
-    if (i + 1 <= splitsWithExtraPenny)
-      return {
-        ...split,
-        value: +(equalSplitAmount + 0.01).toFixed(2),
-      };
+    const newSplitValues = currency(totalAmount).distribute(splits.length);
+    // if (i + 1 <= splitsWithExtraPenny)
+    //   return {
+    //     ...split,
+    //     value: +(equalSplitAmount + 0.01).toFixed(2),
+    //   };
 
-    return { ...split, value: equalSplitAmount };
+    /*Using currency library pkg */
+
+    return {
+      ...split,
+      value: newSplitValues[i].value.toFixed(2),
+    };
   });
   return newSplits;
 };
