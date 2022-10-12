@@ -11,24 +11,20 @@ import "./styles.scss";
 export const SplitField = forwardRef((props, ref) => {
   const splitState = useContext(SplitDataContext);
 
-  const [exactAmtInput, setExactAmtInput] = useState("");
-
   const withAdjustmentModifier =
-    props.splitType === "Shares" ? "split-field--with-adjustment" : "";
+    splitState.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
   const handleRemoveClick = () => {
     props.onRemove();
   };
 
   const handleChange = (e) => {
-    const inputId = props.id;
-    console.log(inputId);
-    splitState.handleSplitFieldInputChange(e.target.value, inputId);
+    // props.id === id of individual splits
+    splitState.handleSplitFieldInputChange(e.target.value, props.id);
   };
 
   const handleNameChange = (e) => {
-    const inputId = props.id;
-    splitState.handleNameChange(e.target.value, inputId);
+    splitState.handleNameChange(e.target.value, props.id);
   };
 
   return (
@@ -42,7 +38,7 @@ export const SplitField = forwardRef((props, ref) => {
         value={props.name}
       />
 
-      {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(props.splitType) && (
+      {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(splitState.splitType) && (
         <InputGroup className="split-field__input">
           {splitState.splitType === EXACT_AMOUNTS && (
             <InputGroup.Text>$</InputGroup.Text>
