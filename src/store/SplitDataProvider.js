@@ -138,6 +138,7 @@ const splitReducer = (state, action) => {
       splitsTotalAmount: getSplitsTotal(newSplitsWithValues),
     };
   }
+
   if (action.type === "NAME_CHANGE") {
     const inputName = action.name;
     const newSplitsWithNames = state.splits.map((split, i) => {
@@ -168,6 +169,7 @@ const splitReducer = (state, action) => {
         return {
           ...state,
           splits: newSplits,
+          splitsTotalAmount: getSplitsTotal(newSplits),
         };
       }
       return {
