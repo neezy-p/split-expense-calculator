@@ -11,7 +11,8 @@ export const Splits = (props) => {
 
   const splitState = useContext(SplitDataContext);
 
-  const totalAmountLeftToSplit = 0;
+  const totalAmountLeftToSplit =
+    splitState.getSplitsTotal(splitState.splits) - splitState.totalAmount;
   let totalLeftModifier = "";
 
   if (totalAmountLeftToSplit > 0) {

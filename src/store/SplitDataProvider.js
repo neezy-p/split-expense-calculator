@@ -30,11 +30,10 @@ const getSplitsTotal = (splits) => {
   return total.toFixed(2);
 };
 const newSplitsforEqually = (totalAmount, splits) => {
-  const totalAmountInCents = +(totalAmount * 100);
-  const splitsWithExtraPenny = +(totalAmountInCents % splits.length);
-  const equalSplitAmount = +(totalAmount / splits.length).toFixed(2);
-
-  console.log("modulo", splitsWithExtraPenny);
+  // const totalAmountInCents = +(totalAmount * 100);
+  // const splitsWithExtraPenny = +(totalAmountInCents % splits.length);
+  // const equalSplitAmount = +(totalAmount / splits.length).toFixed(2);
+  // console.log("modulo", splitsWithExtraPenny);
   const newSplits = splits.map((split, i) => {
     const newSplitValues = currency(totalAmount).distribute(splits.length);
     // if (i + 1 <= splitsWithExtraPenny)
@@ -62,6 +61,12 @@ const splitReducer = (state, action) => {
     const updatedSplitType = action.splitType;
     console.log(action.splitType);
     console.log(state);
+    const newSplitsWithEmptyValues = state.splits.map((split, i) => {
+      return {
+        ...split,
+        value: "",
+      };
+    });
 
     if (action.splitType === EQUALLY) {
       if (state.totalAmount === null)
@@ -74,6 +79,15 @@ const splitReducer = (state, action) => {
         splitType: updatedSplitType,
         splits: newSplits,
         splitsTotalAmount: getSplitsTotal(newSplits),
+      };
+    }
+    if (action.splitType !== EQUALLY) {
+      console.log(state);
+      return {
+        ...state,
+        splitType: action.splitType,
+        splits: newSplitsWithEmptyValues,
+        splitsTotalAmount: getSplitsTotal(newSplitsWithEmptyValues),
       };
     }
     return {
@@ -263,6 +277,7 @@ const SplitDataProvider = (props) => {
     handleRemoveSplit,
     handleSplitFieldInputChange,
     handleNameChange,
+    getSplitsTotal,
   };
   return (
     <SplitDataContext.Provider value={splitDataContext}>
