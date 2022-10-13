@@ -1,18 +1,20 @@
 import { Card } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { SplitField } from "../SplitField/SplitField";
-import { useState, useContext } from "react";
-import SplitDataContext from "../../store/split-data-context";
+import { useSplitDataContext } from "../../store/split-data-context";
 
 import "./styles.scss";
+import getSum from "../../utils/getSum";
 
 export const Splits = (props) => {
   // Placeholder variable for testing
 
-  const splitState = useContext(SplitDataContext);
+  const splitState = useSplitDataContext();
 
-  const totalAmountLeftToSplit =
-    splitState.getSplitsTotal(splitState.splits) - splitState.totalAmount;
+  const splitValues = splitState.splits?.map((split) => split.value);
+
+  const totalAmountLeftToSplit = getSum(splitValues) - splitState.totalAmount;
+
   let totalLeftModifier = "";
 
   if (totalAmountLeftToSplit > 0) {
@@ -32,7 +34,7 @@ export const Splits = (props) => {
     console.log(splitFieldInput);
   };
 
-  if (!splitState.splits.length) {
+  if (!splitState.splits?.length) {
     return (
       <div className="splits">
         <span className="splits__no-splits">

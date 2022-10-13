@@ -4,12 +4,12 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faPlusMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
-import SplitDataContext from "../../store/split-data-context";
+import { useSplitDataContext } from "../../store/split-data-context";
 
 import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
-  const splitState = useContext(SplitDataContext);
+  const splitState = useSplitDataContext();
 
   const withAdjustmentModifier =
     splitState.splitType === "Shares" ? "split-field--with-adjustment" : "";

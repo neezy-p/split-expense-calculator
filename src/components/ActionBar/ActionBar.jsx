@@ -1,14 +1,14 @@
 import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
 import { SplitTypeField } from "../SplitTypeField";
-import { useState, useContext } from "react";
-import SplitDataContext from "../../store/split-data-context";
+import { useState } from "react";
+import { useSplitDataContext } from "../../store/split-data-context";
 
 import "./styles.scss";
 
 export const ActionBar = (props) => {
   const [enteredInput, setEnteredInput] = useState("");
 
-  const splitState = useContext(SplitDataContext);
+  const splitState = useSplitDataContext();
 
   const handleAddClick = () => {
     splitState.handleAddSplit(splitState.splitType);

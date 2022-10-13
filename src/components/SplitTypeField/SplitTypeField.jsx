@@ -1,12 +1,11 @@
 import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
 import "./styles.scss";
-import SplitDataContext from "../../store/split-data-context";
-import { useContext } from "react";
+import { useSplitDataContext } from "../../store/split-data-context";
 
 const splitTypes = [EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES];
 
 export const SplitTypeField = (props) => {
-  const splitState = useContext(SplitDataContext);
+  const splitState = useSplitDataContext();
 
   const getSelectedModifier = (type) => {
     return type === splitState.splitType ? "split-type__option--selected" : "";
