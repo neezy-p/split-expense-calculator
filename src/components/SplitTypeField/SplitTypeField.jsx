@@ -1,17 +1,18 @@
-import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
-import './styles.scss';
+import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
+import "./styles.scss";
+import { useSplitDataContext } from "../../store/split-data-context";
 
 const splitTypes = [EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES];
 
 export const SplitTypeField = (props) => {
+  const splitState = useSplitDataContext();
+
   const getSelectedModifier = (type) => {
-    return type === props.selectedSplitType
-      ? 'split-type__option--selected'
-      : '';
+    return type === splitState.splitType ? "split-type__option--selected" : "";
   };
 
   const handleClickFor = (type) => () => {
-    props.onSelect(type);
+    splitState.handleSplitTypeSelect(type);
   };
 
   return (

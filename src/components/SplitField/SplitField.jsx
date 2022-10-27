@@ -1,45 +1,66 @@
-import { forwardRef } from 'react';
-import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faPlusMinus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EXACT_AMOUNTS, PERCENTAGES, SHARES } from '../../constants';
+import { forwardRef, useContext } from "react";
+import { Button, Card, FormControl, InputGroup } from "react-bootstrap";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPlusMinus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EQUALLY, EXACT_AMOUNTS, PERCENTAGES, SHARES } from "../../constants";
+import { useSplitDataContext } from "../../store/split-data-context";
 
-import './styles.scss';
+import "./styles.scss";
 
 export const SplitField = forwardRef((props, ref) => {
+  const splitState = useSplitDataContext();
+
   const withAdjustmentModifier =
-    props.splitType === 'Shares' ? 'split-field--with-adjustment' : '';
+    splitState.splitType === "Shares" ? "split-field--with-adjustment" : "";
 
   const handleRemoveClick = () => {
     props.onRemove();
+  };
+
+  const handleChange = (e) => {
+    // props.id === id of individual splits
+    splitState.handleSplitFieldInputChange(e.target.value, props.id);
+  };
+
+  const handleNameChange = (e) => {
+    splitState.handleNameChange(e.target.value, props.id);
   };
 
   return (
     <div className={`split-field ${withAdjustmentModifier}`} ref={ref}>
       <div className="split-field__index">{props.position}</div>
 
-      <FormControl placeholder="Name" className="split-field__name" />
+      <FormControl
+        placeholder="Name"
+        className="split-field__name"
+        onChange={handleNameChange}
+        value={props.name}
+      />
 
-      {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(props.splitType) && (
+      {[EXACT_AMOUNTS, PERCENTAGES, SHARES].includes(splitState.splitType) && (
         <InputGroup className="split-field__input">
-          {props.splitType === EXACT_AMOUNTS && (
+          {splitState.splitType === EXACT_AMOUNTS && (
             <InputGroup.Text>$</InputGroup.Text>
           )}
 
-          <FormControl />
+          <FormControl
+            onChange={handleChange}
+            value={props.value}
+            key={props.key}
+          />
 
-          {props.splitType === PERCENTAGES && (
+          {splitState.splitType === PERCENTAGES && (
             <InputGroup.Text>%</InputGroup.Text>
           )}
 
-          {props.splitType === SHARES && (
+          {splitState.splitType === SHARES && (
             <InputGroup.Text>share(s)</InputGroup.Text>
           )}
         </InputGroup>
       )}
 
-      {props.splitType === SHARES && (
+      {splitState.splitType === SHARES && (
         <InputGroup className="split-field__adjustment">
           <InputGroup.Text className="split-field__adjustment-text">
             <FontAwesomeIcon icon={faPlusMinus} size="2xs" />$
@@ -49,7 +70,12 @@ export const SplitField = forwardRef((props, ref) => {
         </InputGroup>
       )}
 
-      <Card className="split-field__amount">$0</Card>
+      <Card className="split-field__amount">
+        $
+        {splitState.splitType === EQUALLY &&
+          (splitState.totalAmount === null ? "0" : props.value)}
+        {splitState.splitType === EXACT_AMOUNTS && props.value}
+      </Card>
 
       <Button
         variant="link"
